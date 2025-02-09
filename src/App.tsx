@@ -96,16 +96,86 @@ function Demo() {
 }
 // Fim do exemplo acima
 
+type StateTestProps = {
+  setCount: React.Dispatch<React.SetStateAction<number | null>>
+}
+
+function StateTest({ setCount }: StateTestProps) {
+  return <button onClick={() => setCount(1)}>Clique aqui</button>
+}
+
+type User = {
+  id: number
+  name: string
+  age: number
+}
+
+type CardProps = {
+  alertMessage: (message: string) => void // padrão de como tipar uma função: '(param:tipo) => retorno'
+  users: User[]
+  color: 'red' | 'blue' | 'green'
+  size: 'sm' | 'md' | 'lg'
+}
+
+// Estabelecer estilos do tailwind no padrão do objeto abaixo
+const colorMap = {
+  red: 'red',
+  blue: 'blue',
+  green: 'green',
+}
+
+const sizeMap = {
+  sm: '10px',
+  md: '20px',
+  lg: '30px',
+}
+
+function Card({ alertMessage, users, color, size }: CardProps) {
+  return (
+    <div>
+      <button onClick={() => alertMessage('Oi, tudo bem?')}>Clique aqui</button>
+      {users.map((user) => (
+        <div key={user.id}>
+          <p>
+            Nome:{' '}
+            <span
+              style={{
+                fontWeight: 'bold',
+                color: colorMap[color],
+                fontSize: sizeMap[size],
+              }}
+            >
+              {user.name}
+            </span>
+          </p>
+          <p> Idade: {user.age} </p>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 function App() {
   const [count, setCount] = useState<number | null>(0)
 
-  if (count !== null) {
-    return <div>{count}</div>
+  // return <StateTest setCount={setCount} />
+
+  function alertMessage(message: string) {
+    alert(message)
   }
+
+  // if (count !== null) {
+  //   return <div>{count}</div>
+  // }
 
   const items = [
     { id: 1, name: 'Pedro' },
     { id: 2, name: 'Maria' },
+  ]
+
+  const users = [
+    { id: 1, age: 35, name: 'Maria' },
+    { id: 2, age: 41, name: 'Carla' },
   ]
 
   return (
@@ -132,6 +202,8 @@ function App() {
           return <h3 key={index}>{item.name}</h3>
         }}
       />
+
+      <Card alertMessage={alertMessage} users={users} color="red" size="md" />
     </>
   )
 }
