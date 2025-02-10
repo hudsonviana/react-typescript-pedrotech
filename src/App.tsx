@@ -186,8 +186,28 @@ function App() {
 
   // https://www.youtube.com/watch?v=DxqiBrERv6o
 
+  function handleClick(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+    console.log(e.preventDefault())
+  }
+
+  function handleClick2(e: React.FormEvent<HTMLFormElement>) {
+    console.log(e.preventDefault())
+  }
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    console.log(e.target.value)
+  }
+
+  const myObject = { age: 39 } as const
+  const myArray = [1, 2, 3] as const
+  // myArray.push(4)
+  // myObject.age = 40
+
   return (
     <>
+      <button onClick={(e) => handleClick(e)}>Teste de evento</button>
+      <input type="text" onChange={(e) => handleChange(e)} />
+
       {!loading && user && user.name}
       {/* <Person name="Hudson" age={40} isMaried={true} />
       <Person name="Eliane" age={38} isMaried={false} /> */}
@@ -212,7 +232,7 @@ function App() {
         }}
       />
 
-      <Card alertMessage={alertMessage} users={users} color="blue" size="lg" />
+      <Card alertMessage={alertMessage} users={users} color="green" size="lg" />
       <Button variant={'outline'}>Click me</Button>
     </>
   )
