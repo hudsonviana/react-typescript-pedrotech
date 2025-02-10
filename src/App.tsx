@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 // import Button from './components/Button'
 // import TextField from './components/TextField'
 // import Person from './components/Person'
@@ -6,6 +6,8 @@ import React, { useState } from 'react'
 // function fieldChange(e) {
 //   e.target.value
 // }
+
+import { Button } from '@/components/ui/button'
 
 type TypographyProps = {
   children: React.ReactNode
@@ -110,24 +112,27 @@ type User = {
   age: number
 }
 
-type CardProps = {
-  alertMessage: (message: string) => void // padrão de como tipar uma função: '(param:tipo) => retorno'
-  users: User[]
-  color: 'red' | 'blue' | 'green'
-  size: 'sm' | 'md' | 'lg'
-}
-
 // Estabelecer estilos do tailwind no padrão do objeto abaixo
 const colorMap = {
-  red: 'red',
-  blue: 'blue',
-  green: 'green',
+  red: 'text-red-600',
+  blue: 'text-blue-600',
+  green: 'text-green-600',
 }
 
 const sizeMap = {
-  sm: '10px',
-  md: '20px',
-  lg: '30px',
+  sm: 'text-sm',
+  md: 'text-base',
+  lg: 'text-lg',
+}
+
+type TextColor = keyof typeof colorMap
+type TextSize = keyof typeof sizeMap
+
+type CardProps = {
+  alertMessage: (message: string) => void // padrão de como tipar uma função: '(param:tipo) => retorno'
+  users: User[]
+  color: TextColor
+  size: TextSize
 }
 
 function Card({ alertMessage, users, color, size }: CardProps) {
@@ -138,13 +143,7 @@ function Card({ alertMessage, users, color, size }: CardProps) {
         <div key={user.id}>
           <p>
             Nome:{' '}
-            <span
-              style={{
-                fontWeight: 'bold',
-                color: colorMap[color],
-                fontSize: sizeMap[size],
-              }}
-            >
+            <span className={`${colorMap[color]} ${sizeMap[size]}`}>
               {user.name}
             </span>
           </p>
@@ -157,6 +156,13 @@ function Card({ alertMessage, users, color, size }: CardProps) {
 
 function App() {
   const [count, setCount] = useState<number | null>(0)
+  const [user, setUser] = useState<User | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    setUser({ id: 4, name: 'Hudson', age: 39 })
+    setLoading(false)
+  }, [])
 
   // return <StateTest setCount={setCount} />
 
@@ -178,8 +184,11 @@ function App() {
     { id: 2, age: 41, name: 'Carla' },
   ]
 
+  // https://www.youtube.com/watch?v=DxqiBrERv6o
+
   return (
     <>
+      {!loading && user && user.name}
       {/* <Person name="Hudson" age={40} isMaried={true} />
       <Person name="Eliane" age={38} isMaried={false} /> */}
       {/* <Button theme="red" color="blue" /> */}
@@ -203,7 +212,8 @@ function App() {
         }}
       />
 
-      <Card alertMessage={alertMessage} users={users} color="red" size="md" />
+      <Card alertMessage={alertMessage} users={users} color="blue" size="lg" />
+      <Button variant={'outline'}>Click me</Button>
     </>
   )
 }
